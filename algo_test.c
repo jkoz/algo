@@ -8,6 +8,8 @@
 #include "string_algo.h"
 #include "dlist.h"
 #include "list.h"
+#include "stack.h"
+#include "queue.h"
 
 /* sort */
 static int compare_int(const void *x, const void *y) {
@@ -124,22 +126,76 @@ void test_dlist() {
 	assert(dlist_ins_prev(dlist, dlist_head(dlist), (void*) second) == 0);
 	dlist_print(dlist, my_data_print);
 
-
-	/*my_data *rem;*/
-	/*dlist_remove(dlist, NULL, (void**)&rem);*/
-	/*printf("remove %s\nlist remain:\n", rem->name);*/
-	/*dlist_print(dlist, my_data_print);*/
-	/*free(rem);*/
+	my_data *rem;
+	dlist_remove(dlist, dlist_tail(dlist), (void**)&rem);
+	printf("remove %s\nlist remain:\n", rem->name);
+	dlist_print(dlist, my_data_print);
+	free(rem);
 
 	dlist_destroy(dlist);
 }
+
+/* stack */
+void test_stack() {
+	Stack *dlist = (Stack*) malloc(sizeof(Stack));
+
+    // first element
+	printf("\nAdd first element\n");
+	my_data *first = malloc(sizeof(my_data));
+	first->name = "Tai";
+	first->age = 28;
+	first->in = (inner*) malloc(sizeof(inner));
+
+	assert(stack_push(dlist, (void*) first) == 0);
+	stack_print(dlist, my_data_print);
+
+    // second element
+	printf("\nAdd second element\n");
+	my_data *second = malloc(sizeof(my_data));
+	second->name = "Phung";
+	second->age = 27;
+	second->in = (inner*) malloc(sizeof(inner));
+
+	assert(stack_push(dlist, (void*) second) == 0);
+	stack_print(dlist, my_data_print);
+
+}
+
+void test_queue() {
+	Queue *dlist = (Queue*) malloc(sizeof(Queue));
+
+    // first element
+	printf("\nAdd first element\n");
+	my_data *first = malloc(sizeof(my_data));
+	first->name = "Tai";
+	first->age = 28;
+	first->in = (inner*) malloc(sizeof(inner));
+
+	assert(queue_enqueue(dlist, (void*) first) == 0);
+	stack_print(dlist, my_data_print);
+
+    // second element
+	printf("\nAdd second element\n");
+	my_data *second = malloc(sizeof(my_data));
+	second->name = "Phung";
+	second->age = 27;
+	second->in = (inner*) malloc(sizeof(inner));
+
+	assert(queue_enqueue(dlist, (void*) second) == 0);
+	stack_print(dlist, my_data_print);
+
+}
+
 
 int main() {
 	/*test_ins_sort();*/
 	/*test_rev_str();*/
 	/*test_recursive();*/
-	test_list();
-	test_dlist();
+	/*test_list();*/
+
+	/*test_dlist();*/
+	test_stack();
+	test_queue();
 
 	return 0;
 }
