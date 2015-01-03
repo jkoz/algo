@@ -2,7 +2,7 @@ P=algo_test
 CFLAGS=-g -Wall -O3 -std=c99
 LDFLAGS=
 CC=gcc
-OBJS = list.o dlist.o clist.o stack.o queue.o string_algo.o sort.o recursive.o
+OBJS = list.o dlist.o clist.o stack.o queue.o set.o chtbl.o string_algo.o sort.o recursive.o
 
 
 $(P): $(P).c libalgo.so
@@ -26,6 +26,12 @@ queue.o: queue.h queue.c
 
 stack.o: stack.h stack.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -c -fPIC stack.h stack.c
+
+set.o: set.h set.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -c -fPIC set.h set.c
+
+chtbl.o: chtbl.h chtbl.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -c -fPIC chtbl.h chtbl.c
 
 sort.o: sort.h sort.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -c -fPIC sort.h sort.c
