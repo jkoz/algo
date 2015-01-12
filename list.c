@@ -76,7 +76,7 @@ int list_rem_next(List *list, ListElmt *element, void **data) {
 	return 0;
 }
 
-void list_print(List *list, void (*print)(void *data)) {
+void list_print(List *list, void (*print)(const void *data)) {
 	printf("Size: %d { ", list->size);
     ListElmt *it = list_head(list);
 	while (it != NULL) {

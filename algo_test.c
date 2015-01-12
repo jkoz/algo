@@ -12,6 +12,27 @@
 #include "queue.h"
 #include "set.h"
 #include "chtbl.h"
+#include "ohtbl.h"
+#include "bitree.h"
+
+
+/* game */
+void print_materia_code() {
+	int value = 0x8009CE60;
+	int val2 = 0xFF00;
+
+	int i = 0;
+	for (i = 0; i < 100; i++ ){ /* util xxxxxxxx xx5f */
+
+		char str[15];
+		sprintf(str, "%x %x", value, val2);
+
+		printf("[*materia%i]\n", i);
+		printf("%s\n", str);
+		value = value + 0x4;
+		val2++;
+	}
+}
 
 /* sort */
 static int compare_int(const void *x, const void *y) {
@@ -56,9 +77,15 @@ typedef struct my_data_ {
 	inner *in;
 } my_data;
 
-static void my_data_print(void *data) {
+static void my_data_print(const void *data) {
 	my_data *d = (my_data*) data;
-	printf("%s - %d", d->name, d->age);
+	printf("{%s - %d}", d->name, d->age);
+}
+
+static int my_data_print_treenode(void *data) {
+	my_data *d = (my_data*) data;
+	printf("{%s - %d} ", d->name, d->age);
+	return 0;
 }
 
 static void my_data_destroy(void *data) {
@@ -221,7 +248,7 @@ int hash_string(const void *key) {
 		ptr++;
 	}
 
-	printf("hash(%s)=%d\n", (char*) key, val);
+	/*printf("hash(%s)=%d\n", (char*) key, val);*/
 	return val;
 }
 
@@ -262,6 +289,71 @@ void test_chbtl() {
 	chtbl_destroy(chtbl);
 }
 
+void test_ohbtl() {
+	OHTbl *ohtbl = malloc(sizeof(OHTbl));
+	ohtbl_init(ohtbl, 7, my_data_hash, my_data_hash, my_data_match, my_data_destroy);
+
+	my_data *d1 = malloc(sizeof(my_data));
+	ohtbl_insert(ohtbl, (void*) my_data_init(d1, "Tai", 27));
+
+	my_data *d2 = malloc(sizeof(my_data));
+	ohtbl_insert(ohtbl, (void*) my_data_init(d2, "Phung", 27));
+
+	my_data *d3 = malloc(sizeof(my_data));
+	my_data_init(d3, "Taylorxsdfas", 27);
+	ohtbl_insert(ohtbl, (void*) d3);
+
+	assert(ohtbl_size(ohtbl) == 3);
+
+	ohtbl_print(ohtbl, my_data_print);
+
+	printf("remove Taylor...\n");
+	ohtbl_remove(ohtbl, (void **) &d3);
+	ohtbl_print(ohtbl, my_data_print);
+	assert(ohtbl_size(ohtbl) == 2);
+
+	printf("remove Tai...\n");
+	ohtbl_remove(ohtbl, (void **) &d1);
+	ohtbl_print(ohtbl, my_data_print);
+	assert(ohtbl_size(ohtbl) == 1);
+
+	ohtbl_destroy(ohtbl);
+}
+
+void test_bitree() {
+	BiTree *bitree = (BiTree *)malloc(sizeof(BiTree));
+	bitree_init(bitree, my_data_destroy);
+
+	my_data *m1 = (my_data *)malloc(sizeof(my_data));
+	bitree_ins_left(bitree, NULL, (void*) my_data_init(m1, "Peter", 10));
+
+	my_data *m2 = (my_data *)malloc(sizeof(my_data));
+	bitree_ins_left(bitree, bitree_root(bitree), (void*) my_data_init(m2, "Tai", 27));
+
+	my_data *m21 = (my_data *)malloc(sizeof(my_data));
+	bitree_ins_left(bitree, bitree_left(bitree_root(bitree)), (void*) my_data_init(m21, "My", 67));
+
+	my_data *m22 = (my_data *)malloc(sizeof(my_data));
+	bitree_ins_right(bitree, bitree_left(bitree_root(bitree)), (void*) my_data_init(m22, "Le", 58));
+
+	my_data *m3 = (my_data *)malloc(sizeof(my_data));
+	bitree_ins_right(bitree, bitree->root, (void*) my_data_init(m3, "Phung", 27));
+
+	my_data *m31 = (my_data *)malloc(sizeof(my_data));
+	bitree_ins_left(bitree, bitree_right(bitree_root(bitree)), (void*) my_data_init(m31, "Van", 67));
+
+	my_data *m32 = (my_data *)malloc(sizeof(my_data));
+	bitree_ins_right(bitree, bitree_right(bitree_root(bitree)), (void*) my_data_init(m32, "Phat", 67));
+
+	bitree_preorder_traverse(bitree_root(bitree), my_data_print_treenode);
+	printf("\n");
+	bitree_inorder_traverse(bitree_root(bitree), my_data_print_treenode);
+	printf("\n");
+	bitree_postorder_traverse(bitree_root(bitree), my_data_print_treenode);
+	printf("\n");
+	bitree_destroy(bitree);
+}
+
 int main() {
 	/*test_ins_sort();*/
 	/*test_rev_str();*/
@@ -271,7 +363,10 @@ int main() {
 	/*test_stack();*/
 	/*test_queue();*/
 	/*test_set();*/
-	test_chbtl();
+	/*test_chbtl();*/
+	/*test_ohbtl();*/
+	test_bitree();
 
+	/*print_materia_code();*/
 	return 0;
 }

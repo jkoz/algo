@@ -94,7 +94,7 @@ int chtbl_lookup(const CHTbl *htbl, void **data) {
 	return -1;
 }
 
-void chtbl_print(CHTbl *htbl, void (*print)(void *data)) {
+void chtbl_print(CHTbl *htbl, void (*print)(const void *data)) {
 	int i;
 	for (i = 0; i < htbl->buckets; i++) {
 		printf("Bucket %i: ", i);

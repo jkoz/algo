@@ -105,7 +105,7 @@ int dlist_remove(DList *list, DListElmt *element, void **data) {
 	return 0;
 }
 
-void dlist_print(DList *list, void (*print)(void *data)) {
+void dlist_print(DList *list, void (*print)(const void *data)) {
 	printf("Size: %d { ", list->size);
     DListElmt *it = dlist_head(list);
 	while (it != NULL) {

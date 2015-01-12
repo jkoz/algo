@@ -17,6 +17,6 @@ int chtbl_insert(CHTbl *htbl, const void *data);
 int chtbl_remove(CHTbl *htbl, void **data);
 int chtbl_lookup(const CHTbl *htbl, void **data);
 #define chtbl_size(htbl) ((htbl)->size)
-void chtbl_print(CHTbl *htbl, void (*print)(void *data));
+void chtbl_print(CHTbl *htbl, void (*print)(const void *data));
 
 #endif
